@@ -1,0 +1,22 @@
+import cv2
+import numpy as np
+from sklearn.svm import SVC
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+#loading camptured images data
+
+sh = np.load('shashwat.npy')
+pa = np.load('papa.npy')
+sh = sh.reshape(101,850*850*3)
+pa = pa.reshape(101,850*850*3)
+
+X = np.r_[sh,pa]
+labels = np.zeros(X.shape[0])
+labels[101:] = 1.0
+x_train, x_test, y_train, y_test = train_test_split(X,labels, test_size = 0.37)
+
+svm =SVC()
+svm.fit(x_train,y_train)
+y_pred = svm.predict(x_test)
+accuracy_score(y_test,y_pred)
